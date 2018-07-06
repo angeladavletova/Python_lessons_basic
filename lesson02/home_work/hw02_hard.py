@@ -5,6 +5,15 @@ equation = 'y = -12x + 11111140.2121'
 x = 2.5
 # вычислите и выведите y
 
+equation = input('Введите уравнение прямой вида y = kx + b: ')
+x = float(input('Введите координату x: '))
+equation = equation.replace(' ', '')
+equation = equation.replace('+', '')
+index_x = equation.find('x')
+index_equal = equation.find('=')
+k = float(equation[index_equal + 1 : index_x])
+b = float(equation[index_x + 1 :])
+print('y = ', k * x + b)
 
 # Задание-2: Дата задана в виде строки формата 'dd.mm.yyyy'.
 # Проверить, корректно ли введена дата.
@@ -24,6 +33,21 @@ date = '01.22.1001'
 date = '1.12.1001'
 date = '-2.10.3001'
 
+date = input('Введите дату в формате dd.mm.yyyy: ')
+if len(date) != 10:
+    exit('Длина строки не соответсвует формату dd.mm.yyyy')
+d = int(date[:2])
+m = int(date[3:5])
+y = int(date[6:])
+dict = {1 : 31, 2 : 29, 3 : 31, 4 : 30, 5 : 31, 6 : 30, 7 : 31, 8 : 31, 9 : 30, 10 : 31, 11 : 30, 12 : 31}
+
+if m < 1 or m > 12:
+    exit('Некорректный месяц')
+if y < 1 or y > 9999:
+    exit('Некорректный год')
+if d > int(dict[m]) or d < 1:
+    exit('Некорректный день')
+print('Корректная дата')
 
 # Задание-3: "Перевёрнутая башня" (Задача олимпиадного уровня)
 #
@@ -54,3 +78,16 @@ date = '-2.10.3001'
 #
 # Вход: 11
 # Выход: 5 3
+
+import math
+N = int(input('Введите номер квартиры: '))
+if N < 1 or N > 2000000000:
+    exit('Недопустимый номер квартиры!')
+i = 0
+while N > i ** 2:
+    N -= i ** 2
+    i += 1
+#floor = 0.5 * (i - 1) * i + math.ceil(N / i)
+print('Этаж', 0.5 * (i - 1) * i + math.ceil(N / i))
+#number = (N - 1) % i + 1
+print('Номер на этаже', (N - 1) % i + 1)
