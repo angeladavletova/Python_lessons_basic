@@ -13,3 +13,29 @@
 # Для решения данной задачи используйте алгоритмы из задания easy,
 # оформленные в виде соответствующих функций,
 # и импортированные в данный файл из easy.py
+
+import os
+import hw05_easy
+
+do = ''
+while do != 'q':
+    print('[1] Перейти в папку')
+    print('[2] Просмотреть содержимое текущей папки')
+    print('[3] Удалить папку')
+    print('[4] Создать папку')
+    print('q - Выход')
+    do = int(input('Укажите номер дейсвтия:\n'))
+    if do == 1:
+        dir_name = input('Введите название папки:')
+        dir_path = os.path.join(os.getcwd(), dir_name)
+        os.chdir(dir_path)
+    elif do == 2:
+        print( os.listdir(os.getcwd()))
+    elif do == 3:
+        dir_name = input('Введите название папки:')
+        hw05_easy.delete_dir(dir_name)
+    elif do == 4:
+        dir_name = input('Введите название папки:')
+        hw05_easy.create_dir(dir_name)
+    else:
+        print('Неверная команда')
