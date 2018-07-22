@@ -57,3 +57,81 @@
 модуль random: http://docs.python.org/3/library/random.html
 
 """
+
+import random
+
+def sort_to_max(origin_list, start, end):
+    for i in range(end, start, -1):
+        for j in range(start, i):
+            if origin_list[j] > origin_list[j + 1]:
+                origin_list[j], origin_list[j + 1] = origin_list[j + 1], origin_list[j]
+
+class Card():
+    def __init__(self):
+        self._row_count = 3
+        self._column_count = 9
+        self._number_in_row_count = 5
+        self._numbers = random.sample(range(1, 91), 15)
+        self._kegs_count = 15
+        self._distribution_row = list()
+
+        for i in range(self._row_count):
+            sort_to_max(self._numbers, self._number_in_row_count * i, self._number_in_row_count * (i + 1) - 1)
+            self._distribution_row += random.sample(range(self._column_count), self._number_in_row_count)
+
+    def __str__(self):
+        card = ''
+        num_index = 0
+        for row in range(self._row_count):
+            for col in range(self._column_count):
+                if col in self._distribution_row[self._number_in_row_count * row : self._number_in_row_count * (row + 1)]:
+                    card += ' ' * (2 - len(str(self._numbers[num_index]))) + str(self._numbers[num_index]) + ' '
+                    num_index += 1
+                else:
+                    card += ' ' * 3
+            card += '\n'
+        return card
+
+    def delete_number(self, keg):
+        i = self._numbers.index(keg)
+        self._numbers[i] = '-'
+        self._kegs_count -= 1
+        return True
+
+my_card = Card()
+comp_card = Card()
+print('Добро пожаловать в игру ЛОТО! \n')
+kegs = random.sample(range(1, 91), 90)
+step = 0
+do = ''
+while my_card._kegs_count > 0 and comp_card._kegs_count > 0 and do != 'q':
+    print('Tекущий номер |{}| (осталось {})'.format(kegs[step], 90 - step - 1))
+    print('------ Ваша карточка -----')
+    print(my_card)
+    print('-- Карточка компьютера ---')
+    print(comp_card)
+    do = input('Зачеркнуть цифру? (y/n/q): ')
+
+    try:
+        coincidence = my_card.delete_number(kegs[step])
+    except ValueError:
+        coincidence = False
+
+    try:
+        comp_card.delete_number(kegs[step])
+    except ValueError:
+        pass
+
+    if (do == 'y' and not coincidence) or (do == 'n' and coincidence):
+        print('Вы проиграли!')
+        do = 'q'
+
+    print()
+    step += 1
+
+if my_card._kegs_count == 0:
+    print('Вы выиграли!')
+elif comp_card._kegs_count == 0:
+    print('Вы проиграли!')
+elif my_card._kegs_count == 0 and comp_card._kegs_count == 0:
+    print('Ничья!')
